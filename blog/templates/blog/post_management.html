@@ -1,0 +1,63 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    <h2>Gerenciamento de Posts</h2> 
+    
+    {% if posts %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for post in posts %}
+                <tr>
+                    <td>{{ post.title }}</td>
+                    <td>
+                        <a href="{% url 'post_edit' pk=post.pk %}" class="btn btn-primary btn-sm">
+                            <span class="glyphicon glyphicon-pencil"></span> Editar
+                        </a>
+                        
+                        <button type="button" class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteModal{{ post.pk }}">
+                            <span class="glyphicon glyphicon-trash"></span> Excluir
+                        </button>
+
+                        <div class="modal fade" id="deleteModal{{ post.pk }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ post.pk }}">
+                            <div class="modal-dialog" role="document">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                  </button>
+                                  <h4 class="modal-title" id="deleteModalLabel{{ post.pk }}">Confirmar Exclusão</h4>
+                                </div>
+                                <div class="modal-body">
+                                  <p>Tem certeza que deseja excluir o post "<strong>{{ post.title }}</strong>"?</p>
+                                </div>
+                                <div class="modal-footer">
+                                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                                  <form method="POST" action="{% url 'post_delete' pk=post.pk %}" style="display: inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">
+                                        <span class="glyphicon glyphicon-trash"></span> Sim, excluir
+                                    </button>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>Nenhum post encontrado.</p>
+    {% endif %}
+
+    <a href="{% url 'post_new' %}" class="btn btn-primary btn-sm">
+        <span class="glyphicon glyphicon-pencil"></span> Adicionar
+    </a>
+{% endblock %}

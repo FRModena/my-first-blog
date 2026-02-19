@@ -1,0 +1,13 @@
+{% extends 'blog/base.html' %}
+
+{% block content %}
+    <h2>Confirmar Exclusão</h2>
+    <p>Tem certeza que deseja excluir o post "<strong>{{ post.title }}</strong>"?</p>
+    <form method="POST" class="post-form">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">
+            <span class="glyphicon glyphicon-trash"></span> Sim, excluir
+        </button>
+        <a href="{% url 'post_management' %}" class="btn btn-default">Cancelar</a>
+    </form>
+{% endblock %}
